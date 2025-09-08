@@ -212,8 +212,8 @@ int main(void) {
     
     int playerCount = 0; 
     int puzzleTypeCount = 0;
+    char** puzzleTypes = readPuzzleTypes(&puzzleTypeCount);    
     Player** playerPool = readPlayerPool(&playerCount);
-    char** puzzleTypes = readPuzzleTypes(&puzzleTypeCount);
     
     int puzzleCount = 0;
     scanf("%d", &puzzleCount);
