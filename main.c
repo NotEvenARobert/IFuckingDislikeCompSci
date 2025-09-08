@@ -148,7 +148,12 @@ void printMaxTotalScorer(Player** playerPool, int playerCount) {
 
 void printBestScorer(Puzzle* puzzle) {
     
-        const char *ptype = puzzle->puzzleType ? puzzle->puzzleType : "Unknown";
+        const char *ptype;
+        if (puzzle->puzzleType != NULL) {
+            ptype = puzzle->puzzleType;
+        } else {
+            ptype = "Unknown";
+        }
         
         if(puzzle->playerCount == 0) {
             printf("%s#%d No player yet for this puzzle\n", ptype, puzzle->puzzleNo);
