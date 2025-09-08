@@ -139,12 +139,12 @@ void printMaxTotalScorer(Player** playerPool, int playerCount) {
 
 void printBestScorer(Puzzle* puzzle) {
     
-    printf("%s#%d\n", puzzle->puzzleType, puzzle->puzzleNo);
     if(puzzle->playerCount == 0) {
-        printf("No player yet for this puzzle\n");
+        printf("%s#%d No player yet for this puzzle\n", puzzle->puzzleType, puzzle->puzzleNo);
         return;
     }
 
+    printf("%s#%d\n", puzzle->puzzleType, puzzle->puzzleNo);    
     
     int bestScore = puzzle->scores[0];
     int bestPlayerIndex = 0;
