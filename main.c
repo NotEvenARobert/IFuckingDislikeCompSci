@@ -80,12 +80,14 @@ Archive* createArchive(int puzzleCount) {
     newArchive->puzzleCount = puzzleCount;
     newArchive->puzzles = (Puzzle*)malloc(puzzleCount * sizeof(Puzzle));
 
-    for (int i = 0; i < puzzleCount; i++) {
+    for(int i = 0; i < puzzleCount; i++) {
+            
         newArchive->puzzles[i].puzzleType = NULL;
         newArchive->puzzles[i].puzzleNo = 0;
         newArchive->puzzles[i].scores = NULL;
         newArchive->puzzles[i].playerCount = 0;
         newArchive->puzzles[i].players = NULL;
+            
     }    
     return newArchive;
     
