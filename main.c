@@ -153,7 +153,7 @@ void printBestScorer(Puzzle* puzzle) {
         return;
     }    
 
-    printf("%s#%d\n", puzzle->puzzleType, puzzle->puzzleNo);    
+    printf("%s#%d ", puzzle->puzzleType, puzzle->puzzleNo);    
     
     int bestScore = puzzle->scores[0];
     int bestPlayerIndex = 0;
