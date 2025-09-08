@@ -139,7 +139,7 @@ void printMaxTotalScorer(Player** playerPool, int playerCount) {
 
 void printBestScorer(Puzzle* puzzle) {
     
-    printf("%s #%d\n", puzzle->puzzleType, puzzle->puzzleNo);
+    printf("%s#%d\n", puzzle->puzzleType, puzzle->puzzleNo);
     if(puzzle->playerCount == 0) {
         printf("No player yet for this puzzle\n");
         return;
@@ -208,23 +208,7 @@ int main(void) {
     int puzzleCount = 0;
     scanf("%d", &puzzleCount);
     Archive* archive = createArchive(puzzleCount);
-    printf("Archive for %d puzzles successfully created\n\n", archive->puzzleCount);
-    
-    printf("Loading data of %d puzzle types:\n", puzzleTypeCount);
-    for(int c = 0; c < puzzleTypeCount; c++) {
-        
-        printf("  - %s\n", puzzleTypes[c]);
-        
-    }
-    
-    printf("Loading data of %d players:\n", playerCount);
-    for(int d = 0; d < playerCount; d++) {
-        
-        printf("  - %s (Total Score: %d)\n", playerPool[d]->playerName, playerPool[d]->totalScore);
-        
-    }
-    
-    printf("\n----- Reading & Storing Puzzle Data -----");
+
     for(int e = 0; e < archive->puzzleCount; e++) {
         
         char temporaryType[21];
@@ -250,8 +234,6 @@ int main(void) {
             
         }
         
-        printf("Stored Puzzle: Type = %s, ID = %d\n", archive->puzzles[e].puzzleType, archive->puzzles[e].puzzleNo);
-        
         for(int f = 0; f < numPlayersPuzzle; f++) {
             
             char temporaryName[21];
@@ -267,11 +249,6 @@ int main(void) {
         
     }
     
-    printf("\n----- Player Total Scores -----\n");
-    for(int i = 0; i < playerCount; i++) {
-        printf("- %s has a total score of %d\n", playerPool[i]->playerName, playerPool[i]->totalScore);
-    }
-        
     int numQuery;
     scanf("%d", &numQuery);
         
@@ -307,7 +284,6 @@ int main(void) {
     }
 
     free(puzzleTypes);
-    printf("\nAll memory freed\n");    
         
     return 0;
 }
