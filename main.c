@@ -147,47 +147,26 @@ void printMaxTotalScorer(Player** playerPool, int playerCount) {
 }
 
 void printBestScorer(Puzzle* puzzle) {
+
+    if (puzzle->playerCount == 0) {
+        printf("%s#%d No player yet for this puzzle\n", puzzle->puzzleType, puzzle->puzzleNo);
+        return;
+    }    
+
+    printf("%s#%d\n", puzzle->puzzleType, puzzle->puzzleNo);    
     
-        const char *ptype;
-        if (puzzle->puzzleType != NULL) {
-            ptype = puzzle->puzzleType;
-        } else {
-            ptype = "Unknown";
+    int bestScore = puzzle->scores[0];
+    int bestPlayerIndex = 0;
+    
+    for (int k = 1; k < puzzle->playerCount; k++) {
+        if (puzzle->scores[k] > bestScore) {
+            bestScore = puzzle->scores[k];
+            bestPlayerIndex = k;
         }
+    }
         
-        if(puzzle->playerCount == 0) {
-            printf("%s#%d No player yet for this puzzle\n", ptype, puzzle->puzzleNo);
-            return;
-        }
-        
-        int firstValid = -1;
-        for (int i = 0; i < puzzle->playerCount; i++) {
-            if (puzzle->players && puzzle->players[i] != NULL) {
-                firstValid = i;
-                break;
-            }
-        }
-        
-        if (firstValid == -1) {
-            printf("%s#%d No player yet for this puzzle\n", ptype, puzzle->puzzleNo);
-            return;
-        }
-        
-        printf("%s#%d\n", ptype, puzzle->puzzleNo);
-        
-        int bestScore = puzzle->scores[firstValid];
-        int bestPlayerIndex = firstValid;
-        
-        for(int k = firstValid + 1; k < puzzle->playerCount; k++) {
-            if (puzzle->players[k] == NULL) continue;
-            if(puzzle->scores[k] > bestScore) {
-                bestScore = puzzle->scores[k];
-                bestPlayerIndex = k;
-            }
-        }
-        
-        Player* topPlayer = puzzle->players[bestPlayerIndex];
-        printf("%s %d\n", topPlayer->playerName, bestScore);
+    Player* topPlayer = puzzle->players[bestPlayerIndex];
+    printf("%s %d\n", topPlayer->playerName, bestScore);
 
         
 }
@@ -257,11 +236,6 @@ int main(void) {
             archive->puzzles[e].players = (Player**)malloc(numPlayersPuzzle * sizeof(Player*));
             archive->puzzles[e].scores = (int*)malloc(numPlayersPuzzle * sizeof(int));
             
-        } else {
-            
-            archive->puzzles[e].players = NULL;
-            archive->puzzles[e].scores = NULL;
-            
         }
             
         int actualPlayersCount = 0;
@@ -279,11 +253,7 @@ int main(void) {
                     playerPtr->totalScore += score;
                     actualPlayersCount++; 
                     
-            } else {
-                    
-                    archive->puzzles[e].players[f] = NULL;
-                    archive->puzzles[e].scores[f] = 0;
-            }        
+            }      
             
         }
 
