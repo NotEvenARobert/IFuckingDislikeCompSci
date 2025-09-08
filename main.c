@@ -248,8 +248,8 @@ int main(void) {
             Player* playerPtr = getPlayerPtrByName(playerPool, playerCount, temporaryName);
             if(playerPtr != NULL) {
 
-                    archive->puzzles[e].players[f] = playerPtr;
-                    archive->puzzles[e].scores[f] = score;        
+                    archive->puzzles[e].players[actualPlayersCount] = playerPtr;
+                    archive->puzzles[e].scores[actualPlayersCount] = score;        
                     playerPtr->totalScore += score;
                     actualPlayersCount++; 
                     
