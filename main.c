@@ -241,9 +241,13 @@ int main(void) {
             scanf("%s %d", temporaryName, &score);
             
             Player* playerPtr = getPlayerPtrByName(playerPool, playerCount, temporaryName);
+            if (playerPtr != NULL) {
+                    
             archive->puzzles[e].players[f] = playerPtr;
-            archive->puzzles[e].scores[f] = score;
-            playerPtr->totalScore += score;
+            archive->puzzles[e].scores[f] = score;        
+            playerPtr->totalScore += score;    
+                    
+    }
             
         }
         
