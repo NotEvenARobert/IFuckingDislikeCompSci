@@ -79,6 +79,14 @@ Archive* createArchive(int puzzleCount) {
     Archive* newArchive = (Archive*)malloc(sizeof(Archive));
     newArchive->puzzleCount = puzzleCount;
     newArchive->puzzles = (Puzzle*)malloc(puzzleCount * sizeof(Puzzle));
+
+    for (int i = 0; i < puzzleCount; i++) {
+        newArchive->puzzles[i].puzzleType = NULL;
+        newArchive->puzzles[i].puzzleNo = 0;
+        newArchive->puzzles[i].scores = NULL;
+        newArchive->puzzles[i].playerCount = 0;
+        newArchive->puzzles[i].players = NULL;
+    }    
     return newArchive;
     
 }
@@ -135,30 +143,48 @@ void printMaxTotalScorer(Player** playerPool, int playerCount) {
     }
 
     printf("Top player: %s with total score %d\n", topPlayer->playerName, topPlayer->totalScore);
+        
 }
 
 void printBestScorer(Puzzle* puzzle) {
     
-    if(puzzle->playerCount == 0) {
-        printf("%s#%d No player yet for this puzzle\n", puzzle->puzzleType, puzzle->puzzleNo);
-        return;
-    }
-
-    printf("%s#%d\n", puzzle->puzzleType, puzzle->puzzleNo);    
-    
-    int bestScore = puzzle->scores[0];
-    int bestPlayerIndex = 0;
-
-    
-    for(int k = 1; k < puzzle->playerCount; k++) {
-        if(puzzle->scores[k] > bestScore) {
-            bestScore = puzzle->scores[k];
-            bestPlayerIndex = k;
-        }
-    }
+        const char *ptype = puzzle->puzzleType ? puzzle->puzzleType : "Unknown";
         
-    Player* topPlayer = puzzle->players[bestPlayerIndex];
-    printf("%s %d\n", topPlayer->playerName, bestScore);
+        if(puzzle->playerCount == 0) {
+            printf("%s#%d No player yet for this puzzle\n", ptype, puzzle->puzzleNo);
+            return;
+        }
+        
+        int firstValid = -1;
+        for (int i = 0; i < puzzle->playerCount; i++) {
+            if (puzzle->players && puzzle->players[i] != NULL) {
+                firstValid = i;
+                break;
+            }
+        }
+        
+        if (firstValid == -1) {
+            printf("%s#%d No player yet for this puzzle\n", ptype, puzzle->puzzleNo);
+            return;
+        }
+        
+        printf("%s#%d\n", ptype, puzzle->puzzleNo);
+        
+        int bestScore = puzzle->scores[firstValid];
+        int bestPlayerIndex = firstValid;
+        
+        for(int k = firstValid + 1; k < puzzle->playerCount; k++) {
+            if (puzzle->players[k] == NULL) continue;
+            if(puzzle->scores[k] > bestScore) {
+                bestScore = puzzle->scores[k];
+                bestPlayerIndex = k;
+            }
+        }
+        
+        Player* topPlayer = puzzle->players[bestPlayerIndex];
+        printf("%s %d\n", topPlayer->playerName, bestScore);
+
+        
 }
 
 void freePlayerPool(Player** pool, int count) {
@@ -220,7 +246,6 @@ int main(void) {
         char* typePtr = getPuzzleTypePtr(puzzleTypes, puzzleTypeCount, temporaryType);
         archive->puzzles[e].puzzleType = typePtr;
         archive->puzzles[e].puzzleNo = puzzleID;
-        archive->puzzles[e].playerCount = numPlayersPuzzle;
         
         if(numPlayersPuzzle > 0) {
             
@@ -233,7 +258,8 @@ int main(void) {
             archive->puzzles[e].scores = NULL;
             
         }
-        
+            
+        int actualPlayersCount = 0;
         for(int f = 0; f < numPlayersPuzzle; f++) {
             
             char temporaryName[21];
@@ -241,15 +267,22 @@ int main(void) {
             scanf("%s %d", temporaryName, &score);
             
             Player* playerPtr = getPlayerPtrByName(playerPool, playerCount, temporaryName);
-            if (playerPtr != NULL) {
+            if(playerPtr != NULL) {
+
+                    archive->puzzles[e].players[f] = playerPtr;
+                    archive->puzzles[e].scores[f] = score;        
+                    playerPtr->totalScore += score;
+                    actualPlayersCount++; 
                     
-            archive->puzzles[e].players[f] = playerPtr;
-            archive->puzzles[e].scores[f] = score;        
-            playerPtr->totalScore += score;    
+            } else {
                     
-    }
+                    archive->puzzles[e].players[f] = NULL;
+                    archive->puzzles[e].scores[f] = 0;
+            }        
             
         }
+
+        archive->puzzles[e].playerCount = actualPlayersCount;    
         
     }
     
