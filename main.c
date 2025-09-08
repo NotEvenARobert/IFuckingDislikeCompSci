@@ -137,6 +137,67 @@ void printMaxTotalScorer(Player** playerPool, int playerCount) {
     printf("Top player: %s with total score %d\n", topPlayer->playerName, topPlayer->totalScore);
 }
 
+void printBestScorer(Puzzle* puzzle) {
+    
+    printf("%s #%d\n", puzzle->puzzleType, puzzle->puzzleNo);
+    if(puzzle->playerCount == 0) {
+        printf("No player yet for this puzzle\n");
+        return;
+    }
+
+    
+    int bestScore = puzzle->scores[0];
+    int bestPlayerIndex = 0;
+
+    
+    for(int k = 1; k < puzzle->playerCount; k++) {
+        if(puzzle->scores[k] > bestScore) {
+            bestScore = puzzle->scores[k];
+            bestPlayerIndex = k;
+        }
+    }
+        
+    Player* topPlayer = puzzle->players[bestPlayerIndex];
+    printf("%s %d\n", topPlayer->playerName, bestScore);
+}
+
+void freePlayerPool(Player** pool, int count) {
+
+    for(int n = 0; n < count; n++) {
+        
+        free(pool[n]->playerName);
+        free(pool[n]);
+            
+    }
+
+    free(pool);
+        
+}
+
+void freeArchive(Archive* archive) {
+
+    for(int o = 0; o < archive->puzzleCount; o++) {
+
+        if(archive->puzzles[o].players != NULL) {
+                
+            free(archive->puzzles[o].players);
+                
+        }
+            
+        if(archive->puzzles[o].scores != NULL) {
+                
+            free(archive->puzzles[o].scores);
+                
+        }
+            
+    }
+
+    free(archive->puzzles);
+    free(archive);
+        
+}
+
+
 int main(void) {
     
     int playerCount = 0; 
@@ -210,6 +271,43 @@ int main(void) {
     for(int i = 0; i < playerCount; i++) {
         printf("- %s has a total score of %d\n", playerPool[i]->playerName, playerPool[i]->totalScore);
     }
-    
+        
+    int numQuery;
+    scanf("%d", &numQuery);
+        
+    for(int l = 0; l < numQueries; l++) {
+        
+        int queryType;
+        scanf("%d", &queryType);
+
+        if(queryType == 1) {
+
+            printMaxTotalScorer(playerPool, playerCount);
+                
+        } else if(queryType == 2) {
+
+            printf("Top scorer per puzzle:\n");
+                
+            for(int m = 0; m < archive->puzzleCount; m++) {
+
+                printBestScorer(&archive->puzzles[m]);
+                    
+            }
+                
+        }
+            
+    }
+
+    freePlayerPool(playerPool, playerCount);
+    freeArchive(archive);    
+    for(int p = 0; p < puzzleTypeCount; p++) {
+            
+        free(puzzleTypes[p]);
+            
+    }
+
+    free(puzzleTypes);
+    printf("\nAll memory freed\n");    
+        
     return 0;
 }
