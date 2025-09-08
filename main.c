@@ -275,7 +275,7 @@ int main(void) {
     int numQuery;
     scanf("%d", &numQuery);
         
-    for(int l = 0; l < numQueries; l++) {
+    for(int l = 0; l < numQuery; l++) {
         
         int queryType;
         scanf("%d", &queryType);
